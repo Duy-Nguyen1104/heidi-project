@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const GoogleAIService = require("../services/googleAIService");
+const AIService = require("../services/AIService");
 const CallSimulator = require("../services/callSimulator");
 
-const aiService = new GoogleAIService();
+const aiService = new AIService();
 const simulator = new CallSimulator();
 
 // Simulate an inbound call based on clinic config
@@ -13,7 +13,7 @@ router.post("/inbound", async (req, res) => {
   try {
     const result = await simulator.simulateInboundCall(
       clinicConfig,
-      callContext
+      callContext,
     );
     res.json(result);
   } catch (error) {
@@ -29,7 +29,7 @@ router.post("/outbound-followup", async (req, res) => {
     const result = await simulator.simulateFollowupCall(
       clinicConfig,
       templateId,
-      patientResponses
+      patientResponses,
     );
     res.json(result);
   } catch (error) {
