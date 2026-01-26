@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base layer customizations */
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply font-sans text-slate-600 bg-slate-50;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-bold tracking-tighter text-charcoal;
+  }
+}
+
+/* Component layer - reusable patterns */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 font-medium transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-charcoal text-white hover:bg-charcoal-light focus:ring-charcoal shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-charcoal border border-slate-200 hover:bg-slate-50 focus:ring-slate-300;
+  }
+
+  .btn-sunlight {
+    @apply bg-sunlight text-charcoal hover:bg-sunlight-200 focus:ring-sunlight-300;
+  }
+
+  .btn-small {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .btn-icon {
+    @apply p-2 rounded-xl;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 text-charcoal bg-white border border-slate-200 rounded-xl transition-all duration-200 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-charcoal focus:border-transparent;
+  }
+
+  .input-error {
+    @apply border-red-300 focus:ring-red-500;
+  }
+
+  .label {
+    @apply block mb-2 text-sm font-medium text-charcoal;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-card border border-slate-100 p-6;
+  }
+
+  .field-error {
+    @apply mt-1 text-sm text-red-500;
+  }
+}
