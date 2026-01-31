@@ -15,7 +15,7 @@ const StepReview = forwardRef(({ config }, ref) => {
         ([name, day]) =>
           `${name.charAt(0).toUpperCase() + name.slice(1)} (${day.start}-${
             day.end
-          })`
+          })`,
       )
       .join(", ");
   };
@@ -55,7 +55,7 @@ const StepReview = forwardRef(({ config }, ref) => {
       </div>
 
       <div className="grid gap-4">
-        <ReviewSection title="🏥 Clinic Details">
+        <ReviewSection title="Clinic Details">
           <ReviewItem
             label="Clinic Name"
             value={config.clinic_name || "Not set"}
@@ -65,10 +65,9 @@ const StepReview = forwardRef(({ config }, ref) => {
             label="Practice Type"
             value={(config.practice_type || "GP").toUpperCase()}
           />
-          <ReviewItem label="Timezone" value={config.timezone} />
         </ReviewSection>
 
-        <ReviewSection title="⏰ Operating Hours">
+        <ReviewSection title="Operating Hours">
           <ReviewItem
             label="Open Days"
             value={getOpenDays() || "None configured"}
@@ -82,7 +81,7 @@ const StepReview = forwardRef(({ config }, ref) => {
           />
         </ReviewSection>
 
-        <ReviewSection title={`👥 Staff (${staff.length} practitioners)`}>
+        <ReviewSection title={`Staff (${staff.length} practitioners)`}>
           {staff.length === 0 ? (
             <p className="text-sm text-slate-500">
               No practitioners configured
@@ -112,7 +111,7 @@ const StepReview = forwardRef(({ config }, ref) => {
           )}
         </ReviewSection>
 
-        <ReviewSection title="🎭 Agent Persona">
+        <ReviewSection title="Agent Persona">
           <ReviewItem
             label="Tone"
             value={
@@ -126,7 +125,7 @@ const StepReview = forwardRef(({ config }, ref) => {
             value={
               persona.safety_enforcement?.emergency_action?.replace(
                 /_/g,
-                " "
+                " ",
               ) || "Hard redirect to 000"
             }
           />
@@ -138,13 +137,13 @@ const StepReview = forwardRef(({ config }, ref) => {
           />
         </ReviewSection>
 
-        <ReviewSection title="📞 Call Handling">
+        <ReviewSection title="Call Handling">
           <ReviewItem
             label="Business Hours"
             value={
               workflows.business_hours_logic?.inbound_call_action?.replace(
                 /_/g,
-                " "
+                " ",
               ) || "Attempt resolution"
             }
           />
@@ -153,7 +152,7 @@ const StepReview = forwardRef(({ config }, ref) => {
             value={
               workflows.after_hours_logic?.inbound_call_action?.replace(
                 /_/g,
-                " "
+                " ",
               ) || "Take message"
             }
           />
@@ -164,7 +163,7 @@ const StepReview = forwardRef(({ config }, ref) => {
         </ReviewSection>
 
         {(config.followup_templates || []).length > 0 && (
-          <ReviewSection title="📋 Follow-up Templates">
+          <ReviewSection title="Follow-up Templates">
             {config.followup_templates.map((template, i) => (
               <ReviewItem
                 key={i}

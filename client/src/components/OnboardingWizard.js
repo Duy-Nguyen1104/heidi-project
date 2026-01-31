@@ -19,7 +19,7 @@ const STEPS = [
 function OnboardingWizard({ onComplete, initialConfig, isEditing }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [config, setConfig] = useState(
-    initialConfig ? { ...initialConfig } : { ...defaultConfig }
+    initialConfig ? { ...initialConfig } : { ...defaultConfig },
   );
   const [showErrors, setShowErrors] = useState(false);
   const stepRef = useRef(null);
@@ -50,8 +50,10 @@ function OnboardingWizard({ onComplete, initialConfig, isEditing }) {
   const handleComplete = () => {
     const finalConfig = {
       ...config,
-      clinic_id: `clinic_${Date.now()}`,
-      created_at: new Date().toISOString(),
+      // Only generate new clinic_id if one doesn't exist (i.e., not editing)
+      clinic_id: config.clinic_id || `clinic_${Date.now()}`,
+      created_at: config.created_at || new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
     onComplete(finalConfig);
   };
@@ -71,8 +73,8 @@ function OnboardingWizard({ onComplete, initialConfig, isEditing }) {
                     currentStep === step.id
                       ? "bg-charcoal text-white"
                       : currentStep > step.id
-                      ? "bg-sunlight text-charcoal"
-                      : "bg-slate-100 text-slate-400"
+                        ? "bg-sunlight text-charcoal"
+                        : "bg-slate-100 text-slate-400"
                   }`}
                 >
                   {currentStep > step.id ? (

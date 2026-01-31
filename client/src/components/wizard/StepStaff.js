@@ -5,7 +5,7 @@ const StepStaff = forwardRef(({ config, updateConfig, showErrors }, ref) => {
   const noStaffError =
     staff.length === 0 ? "At least one practitioner must be added" : null;
   const staffNameErrors = staff.map((member) =>
-    !member.name?.trim() ? "Name is required" : null
+    !member.name?.trim() ? "Name is required" : null,
   );
   const hasErrors = noStaffError || staffNameErrors.some((e) => e !== null);
 
@@ -205,7 +205,7 @@ const StepStaff = forwardRef(({ config, updateConfig, showErrors }, ref) => {
         Add Practitioner
       </button>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-200">
         <div>
           <label className="label">Unknown Clinician Requests</label>
           <select
@@ -248,7 +248,7 @@ const StepStaff = forwardRef(({ config, updateConfig, showErrors }, ref) => {
             <option value="take_message">Take message only</option>
           </select>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 });

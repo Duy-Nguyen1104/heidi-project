@@ -10,7 +10,6 @@ const StepBasicInfo = forwardRef(
         ? "Phone number is required"
         : null,
       practice_type: !config.practice_type ? "Practice type is required" : null,
-      timezone: !config.timezone ? "Timezone is required" : null,
     };
 
     useImperativeHandle(ref, () => ({
@@ -85,42 +84,21 @@ const StepBasicInfo = forwardRef(
             </div>
 
             <div>
-              <label className="label">Timezone *</label>
+              <label className="label">Number of Practitioners</label>
               <select
-                value={config.timezone || ""}
-                onChange={(e) => updateConfig({ timezone: e.target.value })}
-                className={inputClass("timezone")}
+                value={config.practitioner_count || ""}
+                onChange={(e) =>
+                  updateConfig({ practitioner_count: e.target.value })
+                }
+                className="input"
               >
                 <option value="">Select...</option>
-                <option value="Australia/Sydney">Sydney (AEST/AEDT)</option>
-                <option value="Australia/Melbourne">
-                  Melbourne (AEST/AEDT)
-                </option>
-                <option value="Australia/Brisbane">Brisbane (AEST)</option>
-                <option value="Australia/Perth">Perth (AWST)</option>
-                <option value="Australia/Adelaide">Adelaide (ACST/ACDT)</option>
+                <option value="1">Solo practice (1)</option>
+                <option value="2-5">Small (2-5)</option>
+                <option value="6-10">Medium (6-10)</option>
+                <option value="10+">Large (10+)</option>
               </select>
-              {showErrors && errors.timezone && (
-                <p className="field-error">{errors.timezone}</p>
-              )}
             </div>
-          </div>
-
-          <div>
-            <label className="label">Number of Practitioners</label>
-            <select
-              value={config.practitioner_count || ""}
-              onChange={(e) =>
-                updateConfig({ practitioner_count: e.target.value })
-              }
-              className="input"
-            >
-              <option value="">Select...</option>
-              <option value="1">Solo practice (1)</option>
-              <option value="2-5">Small (2-5)</option>
-              <option value="6-10">Medium (6-10)</option>
-              <option value="10+">Large (10+)</option>
-            </select>
           </div>
         </div>
 
@@ -131,15 +109,14 @@ const StepBasicInfo = forwardRef(
               <p className="font-medium text-charcoal">Why we need this</p>
               <p className="text-sm text-slate-600 mt-1">
                 This information helps Heidi identify your clinic to callers and
-                provide accurate information. The timezone ensures calls are
-                handled correctly based on your business hours.
+                provide accurate information.
               </p>
             </div>
           </div>
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default StepBasicInfo;

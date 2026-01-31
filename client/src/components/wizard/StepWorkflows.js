@@ -21,11 +21,11 @@ const AVAILABLE_ACTIONS = [
     label: "Take messages",
     description: "Record messages for staff",
   },
-  {
-    id: "provide_clinic_info",
-    label: "Provide clinic info",
-    description: "Hours, location, services",
-  },
+  // {
+  //   id: "provide_clinic_info",
+  //   label: "Provide clinic info",
+  //   description: "Hours, location, services",
+  // },
   {
     id: "conduct_followup_script",
     label: "Conduct follow-up calls",
@@ -83,7 +83,7 @@ const StepWorkflows = forwardRef(
         escalation_triggers: {
           ...classification.escalation_triggers,
           keywords: classification.escalation_triggers?.keywords.filter(
-            (_, i) => i !== idx
+            (_, i) => i !== idx,
           ),
         },
       });
@@ -281,7 +281,7 @@ const StepWorkflows = forwardRef(
                       ×
                     </button>
                   </span>
-                )
+                ),
               )}
             </div>
             <div className="flex gap-2">
@@ -333,7 +333,7 @@ const StepWorkflows = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default StepWorkflows;
