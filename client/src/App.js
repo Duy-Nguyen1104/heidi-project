@@ -35,15 +35,28 @@ function App() {
     try {
       let savedConfig;
       if (isEditing && clinicConfig?.clinic_id) {
+        // Try to update existing clinic
         const response = await fetch(
           `${API_BASE}/clinics/${clinicConfig.clinic_id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(config),
-          }
+          },
         );
-        savedConfig = await response.json();
+
+        if (response.ok) {
+          savedConfig = await response.json();
+        } else {
+          // Clinic not found (server may have restarted) - create new one instead
+          console.warn("Clinic not found on server, creating new one");
+          const createResponse = await fetch(`${API_BASE}/clinics`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(config),
+          });
+          savedConfig = await createResponse.json();
+        }
       } else {
         const response = await fetch(`${API_BASE}/clinics`, {
           method: "POST",
