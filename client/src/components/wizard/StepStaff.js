@@ -181,7 +181,7 @@ const StepStaff = forwardRef(({ config, updateConfig, showErrors }, ref) => {
                 className="input"
               />
               <p className="text-xs text-slate-500 mt-1">
-                Separate with commas
+                Separate with semicolons
               </p>
             </div>
           </div>

@@ -689,6 +689,36 @@ class CallSimulator {
       };
     }
 
+    // Check for transfer/staff request - escalate immediately like emergency
+    // Uses escalation_triggers from clinic config if configured
+    if (this._detectTransferRequest(patientMessage, clinicConfig)) {
+      nextState = INBOUND_STATES.TRANSFER_FLOW;
+      aiResponse = await this._generateTransferResponse(
+        clinicConfig,
+        isBusinessHours,
+      );
+      flags.push("TRANSFER_REQUESTED");
+      isComplete = true;
+      finalOutcome = isBusinessHours ? "live_transfer" : "message_for_callback";
+
+      transcript.push({
+        role: "assistant",
+        content: aiResponse,
+        state: nextState,
+        timestamp: new Date().toISOString(),
+      });
+
+      return {
+        ...conversationState,
+        currentState: nextState,
+        transcript,
+        flags,
+        isComplete,
+        finalOutcome,
+        aiResponse,
+      };
+    }
+
     // Process based on current state
     switch (currentState) {
       case INBOUND_STATES.GREETING:
@@ -1106,6 +1136,95 @@ class CallSimulator {
     return emergencyKeywords.some((keyword) =>
       lowerMessage.includes(keyword.toLowerCase()),
     );
+  }
+
+  _detectTransferRequest(message, clinicConfig) {
+    const lowerMessage = message.toLowerCase();
+
+    // Use escalation triggers from clinic config if available
+    const configuredTriggers =
+      clinicConfig?.call_classification?.escalation_triggers?.keywords || [];
+
+    // Combine with default TRANSFER keywords as fallback
+    const allTriggers =
+      configuredTriggers.length > 0
+        ? configuredTriggers
+        : INTENT_CATEGORIES.TRANSFER;
+
+    console.log(`[Transfer] Checking message: "${message}"`);
+    console.log(`[Transfer] Configured triggers:`, configuredTriggers);
+    console.log(`[Transfer] Using triggers:`, allTriggers);
+
+    // Check for specific variations of "talk/speak to doctor"
+    const doctorPatterns = [
+      "talk to a doctor",
+      "talk to doctor",
+      "speak to a doctor",
+      "speak to doctor",
+      "want to talk to a doctor",
+      "want to speak to a doctor",
+      "see a doctor",
+      "speak with a doctor",
+      "talk with a doctor",
+    ];
+
+    // Check doctor patterns first
+    const doctorMatch = doctorPatterns.some((pattern) =>
+      lowerMessage.includes(pattern),
+    );
+    if (doctorMatch) {
+      console.log(`[Transfer] Doctor pattern matched in: "${message}"`);
+      return true;
+    }
+
+    // Check configured triggers
+    const triggered = allTriggers.some((keyword) => {
+      const matches = lowerMessage.includes(keyword.toLowerCase());
+      if (matches) {
+        console.log(`[Transfer] Keyword "${keyword}" matched in: "${message}"`);
+      }
+      return matches;
+    });
+
+    if (triggered) {
+      console.log(
+        `[Transfer] Escalation triggered by configured keywords in: "${message.substring(0, 50)}..."`,
+      );
+    } else {
+      console.log(`[Transfer] No escalation triggers found in: "${message}"`);
+    }
+
+    return triggered;
+  }
+
+  async _generateTransferResponse(clinicConfig, isBusinessHours) {
+    const tone = clinicConfig.agent_persona?.tone_preference || "professional";
+
+    if (isBusinessHours) {
+      const response = await this.aiService.generateResponse(
+        "Generate transfer response",
+        {
+          clinicConfig,
+          instruction: `The patient wants to speak directly to a staff member. Let them know you'll transfer them right away. Be brief and accommodating. Use a ${tone} tone.`,
+        },
+      );
+      return (
+        response.text ||
+        "Absolutely, I'll transfer you to one of our staff members right now. Please hold for just a moment."
+      );
+    } else {
+      const response = await this.aiService.generateResponse(
+        "Generate after-hours transfer response",
+        {
+          clinicConfig,
+          instruction: `The patient wants to speak to a staff member but it's after hours. Apologize that no one is available right now. Let them know you'll leave an urgent message for someone to call them back first thing when the clinic opens. Ask if there's anything urgent they need help with in the meantime. Use a ${tone} tone.`,
+        },
+      );
+      return (
+        response.text ||
+        "I understand you'd like to speak with someone directly. Unfortunately, our clinic is currently closed for the day. I'll leave an urgent message for our team to call you back first thing when we reopen. Is there anything urgent I can help you with in the meantime?"
+      );
+    }
   }
 
   async _generateEmergencyResponse(clinicConfig) {
