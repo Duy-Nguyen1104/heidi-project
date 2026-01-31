@@ -3,7 +3,6 @@
  */
 export const defaultConfig = {
   clinic_name: "",
-  timezone: "Australia/Sydney",
 
   operating_hours: {
     schedule: {

@@ -6,7 +6,6 @@
 const defaultClinicConfig = {
   clinic_id: null, // Generated on creation
   clinic_name: "",
-  timezone: "Australia/Sydney",
 
   operating_hours: {
     schedule: {
