@@ -8,7 +8,7 @@ A self-serve onboarding and simulation platform for Heidi Calls, an AI-powered c
 
 - Node.js 18+
 - npm
-- [LM Studio](https://lmstudio.ai/) running locally with a loaded model
+- [LM Studio](https://lmstudio.ai/) running locally with a loaded model (I use openai/gpt-oss-20b, defined in .env)
 
 ### Installation
 
